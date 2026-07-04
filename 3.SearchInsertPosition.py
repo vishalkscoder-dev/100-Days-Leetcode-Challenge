@@ -18,7 +18,7 @@ def searchInsert(arr, target):
         else:
             right = mid - 1
 
-        return left
+    return left
 
 arr = [1,2,4,7,37]
 target = 5
