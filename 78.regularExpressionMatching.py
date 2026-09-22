@@ -1,32 +1,32 @@
 import subprocess
 subprocess.run('cls', shell=True)
 
-def isMatch(s, p):
-    if p == ".*":
-        return True
+def isMatch(self, s, p):
+    m = len(s)
+    n = len(p)
 
-    i = 0
-    j = 0
+    dp = [[False] * (n + 1) for _ in range(m + 1)]
 
-    while i < len(s) and j < len(p):
+    dp[0][0] = True
 
-        if j + 1 < len(p) and p[j + 1] == "*":
-            while i < len(s) and (s[i] == p[j] or p[j] == "."):
-                i += 1
-            j += 2
+    for j in range(2, n + 1):
+        if p[j - 1] == "*":
+            dp[0][j] = dp[0][j - 2]
 
-        elif s[i] == p[j] or p[j] == ".":
-            i += 1
-            j += 1
+    for i in range(1, m + 1):
+        for j in range(1, n + 1):
 
-        else:
-            return False
+            if p[j - 1] == "." or p[j - 1] == s[i - 1]:
+                dp[i][j] = dp[i - 1][j - 1]
 
-    while j + 1 < len(p) and p[j + 1] == "*":
-        j += 2
+            elif p[j - 1] == "*":
+                dp[i][j] = dp[i][j - 2]
 
-    return i == len(s) and j == len(p)
+                if p[j - 2] == "." or p[j - 2] == s[i - 1]:
+                    dp[i][j] = dp[i][j] or dp[i - 1][j]
 
+    return dp[m][n]
+    
 s = "aa"
 p = ".*"
 
